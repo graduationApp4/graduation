@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart' ;
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
-import 'menu.dart';
+import 'package:my_app/menu.dart';
+
 
 class QrReader extends StatefulWidget {
   @override
@@ -23,13 +24,6 @@ class _QrReaderState extends State<QrReader> {
       ),
       body: Column(
         children: <Widget>[
-          /* Expanded(
-           // flex: 1,
-            child: Center(
-              child: Text("To Use App .. Scan The QR Code" ,),
-            ),
-          ),
-*/
           Expanded(
             flex: 7,
             child: QRView(key: qrKey, onQRViewCreated: _onQRViewCreated,overlay: QrScannerOverlayShape(
@@ -40,31 +34,10 @@ class _QrReaderState extends State<QrReader> {
               cutOutSize: 300,
             ),),
           ),
-          Expanded(
-            flex: 1,
-            /*child: Center(
-              child: Text("Scan result: $qrText"),
-            ),*/
-            child: FlatButton(
-              child: Text('Done'),
-              onPressed: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context){
-
-                      return MyHomePage();
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
         ],
       ),
     );
   }
-
   @override
   void dispose(){
     controller?.dispose();
@@ -77,6 +50,10 @@ class _QrReaderState extends State<QrReader> {
       setState(() {
         qrText = scanData;
       });
+      Navigator.push(context, MaterialPageRoute(builder: (context){
+        return MyHomePage() ;
+      }));
+      dispose();
     });
   }
 }
