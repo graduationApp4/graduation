@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "481841094667",
+    "firebase_url": "https://restaurant-13ffd.firebaseio.com",
+    "project_id": "restaurant-13ffd",
+    "storage_bucket": "restaurant-13ffd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:481841094667:android:26704c7d2519096d9c670e",
+        "android_client_info": {
+          "package_name": "com.example.admin_panel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "481841094667-pog1ehvua5u7o3ursnuvfrii1hu9ocfa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtwrs1vcn4qC7Ucr3IXeiTQIv5uCVJCik"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "481841094667-pog1ehvua5u7o3ursnuvfrii1hu9ocfa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:481841094667:android:21464ee970e5a7cc9c670e",
+        "android_client_info": {
+          "package_name": "com.example.graduation_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "481841094667-pog1ehvua5u7o3ursnuvfrii1hu9ocfa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtwrs1vcn4qC7Ucr3IXeiTQIv5uCVJCik"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "481841094667-pog1ehvua5u7o3ursnuvfrii1hu9ocfa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
