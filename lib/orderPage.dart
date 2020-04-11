@@ -8,6 +8,33 @@ class OrderPage extends StatefulWidget {
 }
 
 class _OrderPageState extends State<OrderPage> {
+
+  var radio1 =0;
+  var check1 =false;
+  var check2 =false;
+  var check3 =false;
+
+  void rdioChecked(int val){
+    setState(() {
+      radio1=val;
+    });
+  }
+  void checkedbox1(bool val){
+    setState(() {
+      check1=val;
+    });
+  }
+  void checkedbox2(bool val){
+    setState(() {
+      check2=val;
+    });
+  }
+  void checkedbox3(bool val){
+    setState(() {
+      check3=val;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -27,9 +54,7 @@ class _OrderPageState extends State<OrderPage> {
                 background: Image.asset('assets/images/1.jpg.jpg'),
               ),
             ),
-            SliverFixedExtentList(
-
-              itemExtent: 211.00,
+            SliverList(
               delegate: SliverChildListDelegate([
                 Card(
                   child: Container(
@@ -74,7 +99,6 @@ class _OrderPageState extends State<OrderPage> {
                 ),
                 Card(
                   child: Container(
-                    width: 100.00 ,
                     margin:  EdgeInsets.only(left: 20.0, right: 20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,17 +115,17 @@ class _OrderPageState extends State<OrderPage> {
                           height: 1.5,
                         ),
                         RadioListTile(
-                          value: 1,
-                          groupValue: 0,
+                          value: 0,
+                          groupValue: radio1,
+                          onChanged: rdioChecked ,
                           title: Text('Small',style: TextStyle(
                               color: Colors.black
                           ),),
                           activeColor: Colors.orange,
-                          secondary: OutlineButton(
-                            child: Text('25 EP',
-                              style: TextStyle(
-                                  color: Colors.black
-                              ),
+                          secondary: Text('25 EP',
+                            style: TextStyle(
+                              color: Colors.black,
+                                fontSize: 16
                             ),
                           ),
                         ),
@@ -111,16 +135,16 @@ class _OrderPageState extends State<OrderPage> {
                         ),
                         RadioListTile(
                           value: 1,
-                          groupValue: 1,
+                          groupValue: radio1,
+                          onChanged: rdioChecked ,
                           title: Text('Medium',style: TextStyle(
                               color: Colors.black
                           ),),
                           activeColor: Colors.orange,
-                          secondary: OutlineButton(
-                            child: Text('30 EP',
-                              style: TextStyle(
-                                  color: Colors.black
-                              ),
+                          secondary: Text('30 EP',
+                            style: TextStyle(
+                              color: Colors.black,
+                                fontSize: 16
                             ),
                           ),
                         ),
@@ -129,18 +153,18 @@ class _OrderPageState extends State<OrderPage> {
                           color: Colors.grey,
                         ),
                         RadioListTile(
-                          value: 1,
-                          groupValue: 0,
+                          value: 2,
+                          groupValue: radio1,
+                          onChanged: rdioChecked ,
                           title: Text('Large',style: TextStyle(
                               color: Colors.black
                           ),
                           ),
                           activeColor: Colors.orange,
-                          secondary: OutlineButton(
-                            child: Text('35 EP ',
-                              style: TextStyle(
-                                  color: Colors.black
-                              ),
+                          secondary: Text('35 EP',
+                            style: TextStyle(
+                              color: Colors.black,
+                                fontSize: 16
                             ),
                           ),
                         ),
@@ -155,7 +179,6 @@ class _OrderPageState extends State<OrderPage> {
                 ),
                 Card(
                   child: Container(
-                    width: 100.00 ,
                     margin:  EdgeInsets.only(left: 20.0, right: 20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,126 +194,72 @@ class _OrderPageState extends State<OrderPage> {
                         SizedBox(
                           height: 1.5,
                         ),
-                        RadioListTile(
-                          value: 1,
-                          groupValue: 0,
+                        CheckboxListTile(
+                          value: check1,
+                          onChanged: checkedbox1,
                           title: Text('Frize',style: TextStyle(
-                              color: Colors.black
+                              color: Colors.black,
                           ),),
                           activeColor: Colors.orange,
-                          secondary: OutlineButton(
-                            child: Text('5 EP',
-                              style: TextStyle(
-                                  color: Colors.black
-                              ),
+                          secondary: Text('5 EP',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 16
                             ),
                           ),
+                          controlAffinity: ListTileControlAffinity.leading,
                         ),
                         Divider(
                           height: 0.05,
                           color: Colors.grey,
                         ),
-                        RadioListTile(
-                          value: 1,
-                          groupValue: 1,
+                        CheckboxListTile(
+                          value: check2,
+                          onChanged: checkedbox2,
                           title: Text('Pepsi',style: TextStyle(
                               color: Colors.black
                           ),),
                           activeColor: Colors.orange,
-                          secondary: OutlineButton(
-                            child: Text('5 EP',
-                              style: TextStyle(
-                                  color: Colors.black
-                              ),
+                          secondary: Text('5 EP',
+                            style: TextStyle(
+                              color: Colors.black,
+                                fontSize: 16
                             ),
                           ),
+                          controlAffinity: ListTileControlAffinity.leading,
                         ),
                         Divider(
                           height: 0.05,
                           color: Colors.grey,
                         ),
-                        RadioListTile(
-                          value: 1,
-                          groupValue: 0,
+                        CheckboxListTile(
+                          value: check3,
+                          onChanged: checkedbox3,
                           title: Text('Salad',style: TextStyle(
-                              color: Colors.black
+                            color: Colors.black
                           ),
                           ),
                           activeColor: Colors.orange,
-                          secondary: OutlineButton(
-                            child: Text('10 EP ',
-                              style: TextStyle(
-                                  color: Colors.black
-                              ),
+                          secondary: Text('5 EP',
+                            style: TextStyle(
+                              color: Colors.black,
+                                fontSize: 16
                             ),
                           ),
+                          controlAffinity: ListTileControlAffinity.leading,
                         ),
-
-
-
-
-
                       ],
                     ),
                   ),
                 ),
 
-                /* Padding(
 
-            padding: EdgeInsets.only(left: 20.00,right: 30),
-
-            child: Row(
-
-              children: <Widget>[
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      border: Border.all(color: Colors.red)
-                  ),
-                  child: Icon(Icons.add),
-                ),
-                SizedBox(
-                  width: 3.0,
-                ),
-                Text("01",style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 25.0
-                ),),
-
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5.0),
-                      border: Border.all(color: Colors.red)
-                  ),
-
-                  child: Icon(Icons.minimize),
-
-                ),
-            Spacer(),
-                Text("30EP",style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20.0,
-
-                ),),
-              ],
+                ]),
             ),
-          ),*/
-                /*Text('22222222222220'),
-          Text('22222222222220'),
-          Text('22222222222220'),
-          Text('22222222222220'),*/
-              ]),
-            ),
-
-
           ],
         ),
-
       ),
       floatingActionButton:  Stack(
-        //alignment: Alignment.topLeft,
         children: <Widget>[
           new FloatingActionButton(
             child: new Icon(Icons.shopping_cart,),
@@ -306,6 +275,16 @@ class _OrderPageState extends State<OrderPage> {
                 ),
               );
             },
+          ),
+          CircleAvatar(
+            radius: 10.0,
+            backgroundColor: Colors.orangeAccent,
+            child: new Text(
+              "0",
+              style: new TextStyle(
+                  color: Colors.black, fontSize: 12.0
+              ),
+            ),
           ),
 
         ],
@@ -325,8 +304,6 @@ class _OrderPageState extends State<OrderPage> {
             ),
           ]
       ),
-
-
 
     );
 
