@@ -1,37 +1,56 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'orderPage.dart';
 
-var bannerItems = ["Burger","Cheese Chilly","Noodles","Pizza"];
+var bannerItems = ["Burger", "Cheese Chilly", "Noodles", "Pizza"];
 var bannerImage = [
   "images/burger.jpg",
   "images/cheesechilly.jpg",
   "images/noodles.jpg",
   "images/pizza.jpg"
-
 ];
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   @override
-  Widget build (BuildContext context){
+  _MyHomePageState createState() => _MyHomePageState();
+  final String _qrText;
 
+  MyHomePage(this._qrText);
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  Firestore firestore = Firestore.instance;
+
+  Future<void> addQr() {
+    Map<String, dynamic> qr = {
+      'result': widget._qrText,
+    };
+    firestore.collection('qr-codes').add(qr).catchError((e) {
+      print(e);
+    });
+  }
+
+  @override
+  void initState() {
+    addQr();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
-
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange,
-        leading: IconButton(icon:Icon(Icons.menu),onPressed:(){
-        }),
+        leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
         title: Center(
           child: Text("Menu"),
         ),
         actions: <Widget>[
-          IconButton(icon: Icon (Icons.person), onPressed: (){
-
-          })
-
+          IconButton(icon: Icon(Icons.person), onPressed: () {})
         ],
       ),
       body: Container(
@@ -43,10 +62,16 @@ class MyHomePage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 BannerWidgetArea(),
-                Padding(padding: EdgeInsets.only(top:20.0,right: 250.0,left: 5.0),
-                    child: Text("Most Popular",style: TextStyle(fontSize: 20.0,color: Colors.black,fontWeight: FontWeight.bold),)
-
-                ),
+                Padding(
+                    padding:
+                        EdgeInsets.only(top: 20.0, right: 250.0, left: 5.0),
+                    child: Text(
+                      "Most Popular",
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    )),
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 20.0),
                   height: 300,
@@ -62,25 +87,33 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/bluehill.jpg"),
                               ListTile(
                                 title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               ),
                               Center(
                                 child: new IconButton(
                                     alignment: Alignment.topCenter,
-                                    icon: new Icon(Icons.details,color: Colors.black,),
+                                    icon: new Icon(
+                                      Icons.details,
+                                      color: Colors.black,
+                                    ),
                                     iconSize: 25.0,
-                                    onPressed: (){
+                                    onPressed: () {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context){
-
+                                          builder: (context) {
                                             return OrderPage();
                                           },
                                         ),
                                       );
-                                    }
-                                ),
+                                    }),
                               ),
                             ],
                           ),
@@ -94,7 +127,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/flipping.jpg"),
                               ListTile(
                                 title: Text("Flipping Noodles"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -109,7 +149,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/hawkers.jpg"),
                               ListTile(
                                 title: Text("The Hawkers"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -123,7 +170,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/pizzahut.jpg"),
                               ListTile(
                                 title: Text("Pizza Hut"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -138,7 +192,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/bluehill.jpg"),
                               ListTile(
                                 title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -152,7 +213,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/bluehill.jpg"),
                               ListTile(
                                 title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -161,10 +229,15 @@ class MyHomePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Padding(padding: EdgeInsets.only(top:0.1,right: 300.0,left: 5.0),
-                    child: Text("Blue Hill",style: TextStyle(fontSize: 20.0,color: Colors.black,fontWeight: FontWeight.bold),)
-
-                ),
+                Padding(
+                    padding: EdgeInsets.only(top: 0.1, right: 300.0, left: 5.0),
+                    child: Text(
+                      "Blue Hill",
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    )),
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 20.0),
                   height: 280,
@@ -179,7 +252,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/bluehill.jpg"),
                               ListTile(
                                 title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -194,7 +274,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/bluehill.jpg"),
                               ListTile(
                                 title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -208,36 +295,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/bluehill.jpg"),
                               ListTile(
                                 title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/bluehill.jpg"),
-                              ListTile(
-                                title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/bluehill.jpg"),
-                              ListTile(
-                                title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -252,7 +317,57 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/bluehill.jpg"),
                               ListTile(
                                 title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 160.0,
+                        child: Card(
+                          child: Wrap(
+                            children: <Widget>[
+                              Image.asset("images/bluehill.jpg"),
+                              ListTile(
+                                title: Text("Blue Hill"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 160.0,
+                        child: Card(
+                          color: Colors.orangeAccent,
+                          child: Wrap(
+                            children: <Widget>[
+                              Image.asset("images/bluehill.jpg"),
+                              ListTile(
+                                title: Text("Blue Hill"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -261,10 +376,15 @@ class MyHomePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Padding(padding: EdgeInsets.only(top:0.1,right: 220.0,left: 5.0),
-                    child: Text("Flipping Noodles",style: TextStyle(fontSize: 20.0,color: Colors.black,fontWeight: FontWeight.bold),)
-
-                ),
+                Padding(
+                    padding: EdgeInsets.only(top: 0.1, right: 220.0, left: 5.0),
+                    child: Text(
+                      "Flipping Noodles",
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    )),
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 20.0),
                   height: 280,
@@ -280,7 +400,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/flipping.jpg"),
                               ListTile(
                                 title: Text("Flipping Noodles"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -294,36 +421,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/flipping.jpg"),
                               ListTile(
                                 title: Text("Flipping Noodles"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/flipping.jpg"),
-                              ListTile(
-                                title: Text("Flipping Noodles"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/flipping.jpg"),
-                              ListTile(
-                                title: Text("Flipping Noodles"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -338,7 +443,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/flipping.jpg"),
                               ListTile(
                                 title: Text("Flipping Noodles"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -352,7 +464,57 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/flipping.jpg"),
                               ListTile(
                                 title: Text("Flipping Noodles"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 160.0,
+                        child: Card(
+                          color: Colors.orangeAccent,
+                          child: Wrap(
+                            children: <Widget>[
+                              Image.asset("images/flipping.jpg"),
+                              ListTile(
+                                title: Text("Flipping Noodles"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 160.0,
+                        child: Card(
+                          child: Wrap(
+                            children: <Widget>[
+                              Image.asset("images/flipping.jpg"),
+                              ListTile(
+                                title: Text("Flipping Noodles"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -361,9 +523,15 @@ class MyHomePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Padding(padding: EdgeInsets.only(top:0.1,right: 325.0,left: 5.0),
-                    child: Text("Burger",style: TextStyle(fontSize: 20.0,color: Colors.black,fontWeight: FontWeight.bold),)
-                ),
+                Padding(
+                    padding: EdgeInsets.only(top: 0.1, right: 325.0, left: 5.0),
+                    child: Text(
+                      "Burger",
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    )),
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 20.0),
                   height: 280,
@@ -378,7 +546,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/hawkers.jpg"),
                               ListTile(
                                 title: Text("The Hawkers"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -393,7 +568,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/hawkers.jpg"),
                               ListTile(
                                 title: Text("The Hawkers"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -407,36 +589,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/hawkers.jpg"),
                               ListTile(
                                 title: Text("The Hawkers"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/hawkers.jpg"),
-                              ListTile(
-                                title: Text("The Hawkers"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/hawkers.jpg"),
-                              ListTile(
-                                title: Text("The Hawkers"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -451,7 +611,57 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/hawkers.jpg"),
                               ListTile(
                                 title: Text("The Hawkers"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 160.0,
+                        child: Card(
+                          child: Wrap(
+                            children: <Widget>[
+                              Image.asset("images/hawkers.jpg"),
+                              ListTile(
+                                title: Text("The Hawkers"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 160.0,
+                        child: Card(
+                          color: Colors.orangeAccent,
+                          child: Wrap(
+                            children: <Widget>[
+                              Image.asset("images/hawkers.jpg"),
+                              ListTile(
+                                title: Text("The Hawkers"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -460,9 +670,15 @@ class MyHomePage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Padding(padding: EdgeInsets.only(top:0.1,right: 325.0,left: 5.0),
-                    child: Text("Pizza",style: TextStyle(fontSize: 20.0,color: Colors.black,fontWeight: FontWeight.bold),)
-                ),
+                Padding(
+                    padding: EdgeInsets.only(top: 0.1, right: 325.0, left: 5.0),
+                    child: Text(
+                      "Pizza",
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold),
+                    )),
                 Container(
                   margin: EdgeInsets.symmetric(vertical: 20.0),
                   height: 280,
@@ -478,7 +694,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/pizzahut.jpg"),
                               ListTile(
                                 title: Text("Pizza Hut"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -492,36 +715,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/pizzahut.jpg"),
                               ListTile(
                                 title: Text("Pizza Hut"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/pizzahut.jpg"),
-                              ListTile(
-                                title: Text("Pizza Hut"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/pizzahut.jpg"),
-                              ListTile(
-                                title: Text("Pizza Hut"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -536,7 +737,14 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/pizzahut.jpg"),
                               ListTile(
                                 title: Text("Pizza Hut"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -550,7 +758,57 @@ class MyHomePage extends StatelessWidget {
                               Image.asset("images/pizzahut.jpg"),
                               ListTile(
                                 title: Text("Pizza Hut"),
-                                subtitle: Text("Burgers " + " | " + "Chinese " + " | " + "Fast Food " + " | " + "Italian " + " | " "Juice"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 160.0,
+                        child: Card(
+                          color: Colors.orangeAccent,
+                          child: Wrap(
+                            children: <Widget>[
+                              Image.asset("images/pizzahut.jpg"),
+                              ListTile(
+                                title: Text("Pizza Hut"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        width: 160.0,
+                        child: Card(
+                          child: Wrap(
+                            children: <Widget>[
+                              Image.asset("images/pizzahut.jpg"),
+                              ListTile(
+                                title: Text("Pizza Hut"),
+                                subtitle: Text("Burgers " +
+                                    " | " +
+                                    "Chinese " +
+                                    " | " +
+                                    "Fast Food " +
+                                    " | " +
+                                    "Italian " +
+                                    " | " "Juice"),
                               )
                             ],
                           ),
@@ -571,20 +829,15 @@ class MyHomePage extends StatelessWidget {
 class BannerWidgetArea extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    var screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    var screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    PageController controller = PageController(
-        viewportFraction: 0.8, initialPage: 1);
+    var screenHeight = MediaQuery.of(context).size.height;
+    var screenWidth = MediaQuery.of(context).size.width;
+    PageController controller =
+        PageController(viewportFraction: 0.8, initialPage: 1);
     List<Widget> banners = new List<Widget>();
 
     for (int x = 0; x < bannerImage.length; x++) {
-      var bannerView = Padding(padding: EdgeInsets.all(10.0),
+      var bannerView = Padding(
+          padding: EdgeInsets.all(10.0),
           child: Container(
             child: Stack(
               fit: StackFit.expand,
@@ -597,26 +850,22 @@ class BannerWidgetArea extends StatelessWidget {
                             color: Colors.black38,
                             offset: Offset(2.0, 2.0),
                             blurRadius: 5.0,
-                            spreadRadius: 1.0
-                        )
-                      ]
-                  ),
+                            spreadRadius: 1.0)
+                      ]),
                 ),
                 ClipRRect(
                     borderRadius: BorderRadius.all(Radius.circular(20.0)),
                     child: Image.asset(
                       bannerImage[x],
                       fit: BoxFit.cover,
-                    )
-                ),
+                    )),
                 Container(
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(20.0)),
                       gradient: LinearGradient(
                           begin: Alignment.topCenter,
                           end: Alignment.bottomCenter,
-                          colors: [Colors.transparent, Colors.black])
-                  ),
+                          colors: [Colors.transparent, Colors.black])),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -624,17 +873,20 @@ class BannerWidgetArea extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      Text(bannerItems[x],
-                        style: TextStyle(fontSize: 25.0, color: Colors.white),),
-                      Text("More Than 40% Off",
-                        style: TextStyle(fontSize: 15.0, color: Colors.white),)
+                      Text(
+                        bannerItems[x],
+                        style: TextStyle(fontSize: 25.0, color: Colors.white),
+                      ),
+                      Text(
+                        "More Than 40% Off",
+                        style: TextStyle(fontSize: 15.0, color: Colors.white),
+                      )
                     ],
                   ),
                 )
               ],
             ),
-          )
-      );
+          ));
       banners.add(bannerView);
     }
     return Container(
