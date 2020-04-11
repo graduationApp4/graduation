@@ -25,7 +25,7 @@ class _timerState extends State<timer> with TickerProviderStateMixin {
     super.initState();
     controller = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 20),
+      duration: Duration(minutes: 15),
     );
   }
 
@@ -62,7 +62,7 @@ class _timerState extends State<timer> with TickerProviderStateMixin {
                                 painter: TimerPainter(
                                   animation: controller,
                                   backgroundColor: Colors.white,
-                                  color: themeData.indicatorColor,
+                                  color: Colors.orangeAccent,
                                 ),
                               );
                             },
@@ -103,22 +103,21 @@ class _timerState extends State<timer> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     FloatingActionButton(
+
                       child: AnimatedBuilder(
                         animation: controller,
                         builder: (BuildContext context, Widget child) {
                           return new Icon (controller.isAnimating
                               ? Icons.local_dining
-                              : Icons.done);
+                              : Icons.done,color: Colors.white,);
                         },
                       ),
+                      backgroundColor: Colors.orange,
                       onPressed: () {
-                        if (controller.isAnimating)
-                          controller.stop();
-                        else {
                           controller.reverse(
                               from: controller.value == 0.0 ? 1.0 : controller
                                   .value);
-                        }
+
                       },
                     )
                   ],

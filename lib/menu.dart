@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'orderPage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 var bannerItems = ["Burger", "Cheese Chilly", "Noodles", "Pizza"];
 var bannerImage = [
@@ -11,7 +12,9 @@ var bannerImage = [
   "images/pizza.jpg"
 ];
 
+
 class MyHomePage extends StatefulWidget {
+
   @override
   _MyHomePageState createState() => _MyHomePageState();
   final String _qrText;
@@ -61,767 +64,131 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                BannerWidgetArea(),
-                Padding(
-                    padding:
-                        EdgeInsets.only(top: 20.0, right: 250.0, left: 5.0),
-                    child: Text(
-                      "Most Popular",
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    )),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 20.0),
-                  height: 300,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/bluehill.jpg"),
-                              ListTile(
-                                title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              ),
-                              Center(
-                                child: new IconButton(
-                                    alignment: Alignment.topCenter,
-                                    icon: new Icon(
-                                      Icons.details,
-                                      color: Colors.black,
-                                    ),
-                                    iconSize: 25.0,
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) {
-                                            return OrderPage();
-                                          },
+               new BannerWidgetArea(),
+               new StreamBuilder(
+                   stream: Firestore.instance.collection('menu').snapshots(),
+                   builder: (BuildContext context,
+                       AsyncSnapshot<QuerySnapshot> snapshhot) {
+                     if (!snapshhot.hasData) return Text("Loading Data.. Please Waiy");
+                     return new Container(
+                       margin: EdgeInsets.symmetric(vertical: 20.0),
+                       height: 320,
+                       child:ListView(
+                         scrollDirection: Axis.horizontal,
+                         shrinkWrap: true,
+                         children: snapshhot.data.documents.map((document) {
+                           return new Container(
+                             width: 160.0,
+                             child: Card(
+                                 color: Colors.white,
+                                 child: Wrap(
+                                   children: <Widget>[
+                                     Image.network(document['image']),
+                                 Padding(padding: EdgeInsets.only(top: 10),
+                                     child: Container(
+                                       height: 80,
+                                       child: ListTile(
+                                         title: Text(document['name']),
+                                         subtitle: Text(document['content']),
+                                       ),
+                                     ),),
+                                     Padding(padding: EdgeInsets.only(left:20.0,top: 0.01),
+                                       child: Text("price: " + document['price_large']),
+                                     ),
+                                     Center(
+                                       child: new IconButton(
+                                           alignment: Alignment.topCenter,
+                                           icon: new Icon(Icons.details,color: Colors.black,),
+                                           iconSize: 25.0,
+                                           onPressed: (){
+                                             Navigator.push(
+                                               context,
+                                               MaterialPageRoute(
+                                                 builder: (context){
+                                                   return OrderPage();
+                                                 },
+                                               ),
+                                             );
+                                           }
+                                       ),
+                                     ),
+                                   ],
+                                 )
+                             ),
+                           );
+                         }).toList(),
+                       ) ,
+
+                     );
+
+                   }),
+                new StreamBuilder(
+                    stream: Firestore.instance.collection('menu').snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snapshhot) {
+                      if (!snapshhot.hasData) return Text("Loading Data.. Please Waiy");
+                      return new Container(
+                        margin: EdgeInsets.symmetric(vertical: 20.0),
+                        height: 320,
+                        child:ListView(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          children: snapshhot.data.documents.map((document) {
+                            return new Container(
+                              width: 160.0,
+                              child: Card(
+                                  color: Colors.white,
+                                  child: Wrap(
+                                    children: <Widget>[
+                                      Image.network(document['image']),
+                                      Padding(padding: EdgeInsets.only(top: 10),
+                                        child: Container(
+                                          height: 80,
+                                          child: ListTile(
+                                            title: Text(document['name']),
+                                            subtitle: Text(document['content']),
+                                          ),
+                                        ),),
+                                      Padding(padding: EdgeInsets.only(left:20.0,top: 0.01),
+                                        child: Text("price: " + document['price_large']),
+                                      ),
+                                      Center(
+                                        child: new IconButton(
+                                            alignment: Alignment.topCenter,
+                                            icon: new Icon(Icons.details,color: Colors.black,),
+                                            iconSize: 25.0,
+                                            onPressed: (){
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context){
+                                                    return OrderPage();
+                                                  },
+                                                ),
+                                              );
+                                            }
                                         ),
-                                      );
-                                    }),
+                                      ),
+                                    ],
+                                  )
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/flipping.jpg"),
-                              ListTile(
-                                title: Text("Flipping Noodles"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/hawkers.jpg"),
-                              ListTile(
-                                title: Text("The Hawkers"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/pizzahut.jpg"),
-                              ListTile(
-                                title: Text("Pizza Hut"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/bluehill.jpg"),
-                              ListTile(
-                                title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/bluehill.jpg"),
-                              ListTile(
-                                title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                    padding: EdgeInsets.only(top: 0.1, right: 300.0, left: 5.0),
-                    child: Text(
-                      "Blue Hill",
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    )),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 20.0),
-                  height: 280,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/bluehill.jpg"),
-                              ListTile(
-                                title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/bluehill.jpg"),
-                              ListTile(
-                                title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/bluehill.jpg"),
-                              ListTile(
-                                title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/bluehill.jpg"),
-                              ListTile(
-                                title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/bluehill.jpg"),
-                              ListTile(
-                                title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/bluehill.jpg"),
-                              ListTile(
-                                title: Text("Blue Hill"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Padding(
-                    padding: EdgeInsets.only(top: 0.1, right: 220.0, left: 5.0),
-                    child: Text(
-                      "Flipping Noodles",
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    )),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 20.0),
-                  height: 280,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/flipping.jpg"),
-                              ListTile(
-                                title: Text("Flipping Noodles"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/flipping.jpg"),
-                              ListTile(
-                                title: Text("Flipping Noodles"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/flipping.jpg"),
-                              ListTile(
-                                title: Text("Flipping Noodles"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/flipping.jpg"),
-                              ListTile(
-                                title: Text("Flipping Noodles"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/flipping.jpg"),
-                              ListTile(
-                                title: Text("Flipping Noodles"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/flipping.jpg"),
-                              ListTile(
-                                title: Text("Flipping Noodles"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                    padding: EdgeInsets.only(top: 0.1, right: 325.0, left: 5.0),
-                    child: Text(
-                      "Burger",
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    )),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 20.0),
-                  height: 280,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/hawkers.jpg"),
-                              ListTile(
-                                title: Text("The Hawkers"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/hawkers.jpg"),
-                              ListTile(
-                                title: Text("The Hawkers"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/hawkers.jpg"),
-                              ListTile(
-                                title: Text("The Hawkers"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/hawkers.jpg"),
-                              ListTile(
-                                title: Text("The Hawkers"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/hawkers.jpg"),
-                              ListTile(
-                                title: Text("The Hawkers"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/hawkers.jpg"),
-                              ListTile(
-                                title: Text("The Hawkers"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                    padding: EdgeInsets.only(top: 0.1, right: 325.0, left: 5.0),
-                    child: Text(
-                      "Pizza",
-                      style: TextStyle(
-                          fontSize: 20.0,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    )),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 20.0),
-                  height: 280,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/pizzahut.jpg"),
-                              ListTile(
-                                title: Text("Pizza Hut"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/pizzahut.jpg"),
-                              ListTile(
-                                title: Text("Pizza Hut"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/pizzahut.jpg"),
-                              ListTile(
-                                title: Text("Pizza Hut"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/pizzahut.jpg"),
-                              ListTile(
-                                title: Text("Pizza Hut"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          color: Colors.orangeAccent,
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/pizzahut.jpg"),
-                              ListTile(
-                                title: Text("Pizza Hut"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        width: 160.0,
-                        child: Card(
-                          child: Wrap(
-                            children: <Widget>[
-                              Image.asset("images/pizzahut.jpg"),
-                              ListTile(
-                                title: Text("Pizza Hut"),
-                                subtitle: Text("Burgers " +
-                                    " | " +
-                                    "Chinese " +
-                                    " | " +
-                                    "Fast Food " +
-                                    " | " +
-                                    "Italian " +
-                                    " | " "Juice"),
-                              )
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                            );
+                          }).toList(),
+                        ) ,
+
+                      );
+
+                    }),
+
               ],
             ),
+
           ),
+
         ),
+
       ),
+
     );
   }
 }
@@ -900,3 +267,4 @@ class BannerWidgetArea extends StatelessWidget {
     );
   }
 }
+
