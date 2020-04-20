@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'firebase_auth.dart';
 import 'login.dart';
 import'qr_code.dart';
 
@@ -10,8 +12,29 @@ class Signup extends StatefulWidget {
 
 class _SignupState extends State<Signup>{
 
+  FirebaseAuthentication firebaseAuthentication = FirebaseAuthentication();
+
   final _formKey = GlobalKey<FormState>();
-  bool isLoading = false;
+  bool _autoValidate = false;
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
+  String error ;
+
+
+  @override
+  void dispose() {
+    super.dispose();
+    _nameController.dispose();
+    _phoneController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +47,7 @@ class _SignupState extends State<Signup>{
               padding: EdgeInsets.only(left: 23, right: 23),
               child: Padding(
                 padding: EdgeInsets.all(8),
-                child: ( isLoading ) ? _drawLogin() : _drawLoginForm(),
+                child: _drawLoginForm(),
               ),
             )
           ],
@@ -43,12 +66,12 @@ class _SignupState extends State<Signup>{
             child: Text(
               "Sign in my account",
               style: TextStyle(
-                  fontSize: 22,
-                  letterSpacing: 1.20,
-                  fontWeight: FontWeight.bold,
-                ),
+                fontSize: 22,
+                letterSpacing: 1.20,
+                fontWeight: FontWeight.bold,
               ),
             ),
+          ),
           Container(
             width:50,
             height:3,
@@ -59,14 +82,15 @@ class _SignupState extends State<Signup>{
             child: Text(
               "Full Name",
               style:TextStyle(
-                  fontSize: 16,
-                ),
+                fontSize: 16,
               ),
             ),
+          ),
           Container(
             width: double.infinity,
             height: 40,
             child: TextFormField(
+              controller: _nameController,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                 //labelText: 'Username',
@@ -104,14 +128,15 @@ class _SignupState extends State<Signup>{
             child: Text(
               "Phone Number",
               style: TextStyle(
-                  fontSize: 16,
-                ),
+                fontSize: 16,
               ),
             ),
+          ),
           Container(
             width: double.infinity,
             height: 40,
             child: TextFormField(
+              controller: _phoneController,
               keyboardType: TextInputType.phone,
               decoration: InputDecoration(
                 //labelText: 'Username',
@@ -149,14 +174,15 @@ class _SignupState extends State<Signup>{
             child: Text(
               "Email",
               style: TextStyle(
-                  fontSize: 16,
-                ),
+                fontSize: 16,
               ),
             ),
+          ),
           Container(
             width: double.infinity,
             height: 40,
             child: TextFormField(
+              controller: _emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 //labelText: 'Username',
@@ -181,12 +207,7 @@ class _SignupState extends State<Signup>{
                     )
                 ),
               ),
-              validator: (value){
-                if(value.isEmpty){
-                  return 'Please enter your Email';
-                }
-                return null;
-              },
+              validator: validateEmail,
             ),
           ),
           Padding(
@@ -194,14 +215,15 @@ class _SignupState extends State<Signup>{
             child: Text(
               "Password",
               style: TextStyle(
-                  fontSize: 16,
-                ),
+                fontSize: 16,
               ),
             ),
+          ),
           Container(
             width: double.infinity,
             height: 40,
             child: TextFormField(
+              controller: _passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 //labelText: 'Password',
@@ -239,14 +261,15 @@ class _SignupState extends State<Signup>{
             child: Text(
               "Confirm Password",
               style: TextStyle(
-                  fontSize: 16,
-                ),
+                fontSize: 16,
               ),
             ),
+          ),
           Container(
             width: double.infinity,
             height: 40,
             child: TextFormField(
+              controller: _confirmPasswordController,
               obscureText: true,
               decoration: InputDecoration(
                 //labelText: 'Password',
@@ -275,6 +298,8 @@ class _SignupState extends State<Signup>{
                 if(value.isEmpty){
                   return 'Please enter your Confirm password';
                 }
+                if(value != _passwordController.text)
+                  return 'Not Match With Password';
                 return null;
               },
             ),
@@ -284,53 +309,67 @@ class _SignupState extends State<Signup>{
             width: double.infinity,
             child: RaisedButton(
               color: Colors.orange,
-              onPressed: (){
+              onPressed: ()async{
                 if( _formKey.currentState.validate() ) {
-                  setState(() {
-                    isLoading = true;
+                  try{
+                    String email = _emailController.text;
+                    String password = _passwordController.text;
+                    var user = await firebaseAuthentication.register(email, password);
+                    Firestore.instance.collection('users').document(user.uid).setData(
+                        {
+                          'name' : _nameController.text,
+                          'email': _emailController.text,
+                          'phone' : _phoneController.text,
+                          'password': _passwordController.text,
+                          'confirm_password': _confirmPasswordController.text,
+                        }
+                    );
                     Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context){
-
                           return QrReader();
                         },
                       ),
                     );
-                  });
-
+                  }catch(e){
+                    print(e);
+                    setState((){
+                      error = e.message;
+                    });
+                  }
                 }else{
                   setState(() {
-                    isLoading = false;
+                    _autoValidate = true;
                   });
                 }
               } ,
               child: Text(
                 "Sign Up",
                 style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
                 "You already have an account,",
                 style: TextStyle(),
-                ),
+              ),
               FlatButton(
                 child: Text(
                   "Login",
                   style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.orange,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    fontSize: 20,
+                    color: Colors.orange,
+                    fontWeight: FontWeight.bold,
                   ),
-                onPressed: (){
+                ),
+                onPressed: () {
 
                   Navigator.push(
                     context,
@@ -342,12 +381,50 @@ class _SignupState extends State<Signup>{
                     ),
                   );
                 },
-              )
+              ),
             ],
           ),
         ],
       ),
     );
+  }
+
+  Widget showAlert(){
+    if(error !=null){
+      return Container(
+        color: Colors.red,
+        width: double.infinity,
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: Icon(Icons.error_outline),
+              ),
+              Expanded(
+                  child: Text(error, maxLines:3)
+              ),
+              IconButton(
+                icon: Icon(Icons.close),
+                onPressed: (){
+                  setState(() {
+                    error =null;
+                  });
+                },
+              ),
+            ]
+        ),
+      );
+    }
+  }
+  String validateEmail(String value) {
+    Pattern pattern =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return 'Enter Valid Email';
+    else
+      return null;
   }
 
   Widget _drawLogin(){

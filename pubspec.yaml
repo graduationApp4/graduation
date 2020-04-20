@@ -30,6 +30,7 @@ dependencies:
   google_fonts: ^0.3.8
   qr_code_scanner: ^0.0.12
   cloud_firestore: ^0.13.4+2
+  firebase_auth: ^0.16.0
 
 dev_dependencies:
   flutter_test:
