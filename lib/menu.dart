@@ -226,7 +226,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) {
-                                                      return OrderPage();
+                                                      return OrderPage(name: document['name']);
                                                     },
                                                   ),
                                                 );
@@ -310,7 +310,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) {
-                                                        return OrderPage();
+                                                        return OrderPage(name: document['name']);
                                                       },
                                                     ),
                                                   );
@@ -395,7 +395,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) {
-                                                        return OrderPage();
+                                                        return OrderPage(name: document['name']);
                                                       },
                                                     ),
                                                   );
@@ -480,7 +480,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) {
-                                                        return OrderPage();
+                                                        return OrderPage(name: document['name']);
                                                       },
                                                     ),
                                                   );
