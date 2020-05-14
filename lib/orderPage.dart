@@ -6,6 +6,7 @@ import 'cart.dart';
 
 class OrderPage extends StatefulWidget {
   String name;
+
   OrderPage({Key key,this.name}):super(key: key);
 
   @override
@@ -39,69 +40,55 @@ class _OrderPageState extends State<OrderPage> {
       check3=val;
     });
   }
-
   @override
   Widget build(BuildContext context) {
-
     return new Scaffold(
-   /* appBar: new AppBar(
-      title: new Text("Test"),
-    ),
-     body: StreamBuilder(
-       stream: Firestore.instance.collection('menu').snapshots() ,
-        builder: (BuildContext context,
-         AsyncSnapshot<QuerySnapshot> snapshhot){
-          if (!snapshhot.hasData) return Text("Loading Data.. Please Waiy");
-          return Column(
-            children: <Widget>[
-             new Text(snapshhot.data.documents[0]['name']),
-              new Text(snapshhot.data.documents[0]['description']),
-            ],
-          );
-    },
-     ),*/
 
-   //drawer: Drawer(),
+      appBar: AppBar(
+        title: Text('Order', style: TextStyle(color: Colors.white),),
+        backgroundColor: Colors.orange,
+      ),
 
 
       body: Center(
-        
-        child: CustomScrollView(
+       child: CustomScrollView(
           slivers: <Widget>[
-      /* new  StreamBuilder(
-                stream: Firestore.instance.collection('menu').snapshots() ,
-                builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> snapshhot) {
-                  if (!snapshhot.hasData) return Text("Loading Data.. Please Waiy");
-                  return Column(
-                    children: snapshhot.data.documents.map((document){
-                      if(document['name']==widget.name)
-                      return SliverAppBar (
-                        //title: Text('Order'),
-                        backgroundColor: Colors.orange,
-                        expandedHeight: 388.00,
-                        flexibleSpace: FlexibleSpaceBar(
-                          background: Image.network(document['image'],fit: BoxFit.cover),
-                        ),
-                      );
-                      return SliverAppBar();
-                    }).toList(),
-                  );
-
-                }
-            ),*/
-      /*   SliverAppBar (
-        //title: Text('Order'),
-        backgroundColor: Colors.orange,
-          expandedHeight: 388.00,
-          flexibleSpace: FlexibleSpaceBar(
-            background: Image.asset('assets/images/1.jpg.jpg'),
-
-          ),
-        ),*/
-
-
             SliverList(
               delegate: SliverChildListDelegate([
+                StreamBuilder(
+                    stream: Firestore.instance.collection('menu').snapshots() ,
+                    builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> snapshhot) {
+                      if (!snapshhot.hasData) return Text("Loading Data.. Please Waiy");
+                      return Column(
+                        children: snapshhot.data.documents.map((document){
+                          if(document['name']==widget.name)
+                            return     Column(
+                              children: <Widget>[
+                                Container (
+                                  height: 200.00,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: NetworkImage(document['image']),
+                                        fit: BoxFit.cover,
+                                      ),
+
+                                      borderRadius: BorderRadius.only(
+                                        bottomRight:  Radius.circular(40.0),
+                                        bottomLeft:  Radius.circular(40.0),
+                                      )
+
+                                  ),
+                                )
+
+                              ],
+                            );
+                          return Container();
+                        }).toList(),
+                      );
+
+                    }
+                ),
+
                StreamBuilder(
                    stream: Firestore.instance.collection('menu').snapshots() ,
                    builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> snapshhot) {
@@ -109,7 +96,7 @@ class _OrderPageState extends State<OrderPage> {
                      return Column(
                        children: snapshhot.data.documents.map((document){
                          if(document['name']==widget.name)
-                         return  Card(
+                         return Card(
                            child: Container(
                              width: 400.00,
                              margin: new EdgeInsets.only(left: 20.0, right: 20.0),
@@ -239,7 +226,6 @@ class _OrderPageState extends State<OrderPage> {
                           return Container();
                         }).toList(),
                       );
-
                     }
                  ),
 
@@ -357,6 +343,60 @@ class _OrderPageState extends State<OrderPage> {
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+     /* bottomNavigationBar:  BottomAppBar(
+        color: Colors.orange,
+        elevation: 0.0,
+        shape:  CircularNotchedRectangle(),
+        notchMargin: 5.0,
+        child: new Container(
+          height: 50.0,
+          decoration: new BoxDecoration(color: Colors.white12),
+          child: new Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+
+              new Container(
+                width: 100.00,
+                child: FlatButton(
+                  child: Text("ADD",
+                      textAlign: TextAlign.center,
+                      style: new TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.w700)),
+                  onPressed: (){
+                    StreamBuilder(
+                      stream: Firestore.instance.collection('menu').snapshots(),
+                        builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> snapshhot) {
+                       if (!snapshhot.hasData) return Text("Loading Data.. Please Waiy");
+                       return Column(
+                           children: snapshhot.data.documents.map((document){
+                             if(document['name']==widget.name)
+                               return createdata();
+                           }).toList(),
+
+                       );
+                      }
+                    );
+                  },
+                ),
+
+              ),
+              new Container(
+                width: 100.00,
+                child: FlatButton(
+                  child: new Text(
+                    "REMOVE",
+                    textAlign: TextAlign.center,
+                    style: new TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w700),
+                  ),
+                  onPressed: (){},
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),*/
 
       bottomNavigationBar: BottomNavigationBar(
           items: < BottomNavigationBarItem >[
