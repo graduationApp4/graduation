@@ -1,13 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' ;
+import 'package:my_app/firebase_auth.dart';
 import 'cart.dart';
+
 
 
 class OrderPage extends StatefulWidget {
   String name;
-
-  OrderPage({Key key,this.name}):super(key: key);
+  String number;
+  OrderPage({Key key,this.name,this.number}):super(key: key);
 
   @override
   _OrderPageState createState() => _OrderPageState();
@@ -15,31 +17,95 @@ class OrderPage extends StatefulWidget {
 
 class _OrderPageState extends State<OrderPage> {
 
-  var radio1 =0;
-  var check1 =false;
-  var check2 =false;
-  var check3 =false;
+  String image;
 
-  void rdioChecked(int val){
+  var radio1 =0;
+  String radioval,radioval2;
+  String SP,MP,LP;
+
+  var check1 =false;
+  String checkval,checkval2;
+
+  var check2 =false;
+  String checkval3,checkval4;
+
+  var check3 =false;
+  String checkval5,checkval6;
+
+
+
+ void rdioChecked(int val) {
     setState(() {
       radio1=val;
+      switch(radio1){
+        case 1:
+          radioval= 'Small ';
+          radioval2=SP;
+          break;
+        case 2:
+          radioval = 'Medium   ';
+          radioval2=MP;
+          break;
+        case 3:
+          radioval = 'Large   ';
+          radioval2=LP;
+          break;
+      }
     });
   }
   void checkedbox1(bool val){
     setState(() {
       check1=val;
+      if(check1==true)
+       { checkval = 'Frize';
+         checkval2 ='8';
+       }
     });
   }
   void checkedbox2(bool val){
     setState(() {
       check2=val;
+      if(check2==true)
+      { checkval3 = 'Pepsi';
+      checkval4 ='5';
+      }
+
     });
   }
   void checkedbox3(bool val){
     setState(() {
       check3=val;
+      if(check3==true)
+      { checkval5= 'Salad';
+      checkval6 ='10';
+      }
     });
   }
+
+  createdata()async{
+   FirebaseAuthentication firebaseAuthentication= FirebaseAuthentication();
+    var user= await firebaseAuthentication.getCurrentUser();
+    DocumentReference  ds= Firestore.instance.collection('UsersOrder').document(user.uid).collection('Orders').document();
+
+
+    Map<String,dynamic> orders={
+      "OrderSize":radioval,
+      "OrderPrice":radioval2,
+      "OrderName": widget.name,
+      "OrderImage":image,
+      "1st OrderOthers": checkval,
+      "1st OrderOthersPrice": checkval2,
+      "2st OrderOthers": checkval3,
+      "2st OrderOthersPrice": checkval4,
+      "3st OrderOthers": checkval5,
+      "3st OrderOthersPrice": checkval6,
+
+    };
+    ds.setData(orders).whenComplete((){
+      print("order done");
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -68,7 +134,7 @@ class _OrderPageState extends State<OrderPage> {
                                   height: 200.00,
                                   decoration: BoxDecoration(
                                       image: DecorationImage(
-                                        image: NetworkImage(document['image']),
+                                        image: NetworkImage(image = document['image']),
                                         fit: BoxFit.cover,
                                       ),
 
@@ -82,12 +148,11 @@ class _OrderPageState extends State<OrderPage> {
 
                               ],
                             );
-                          return Container();
+                         return Container();
                         }).toList(),
                       );
-
                     }
-                ),
+                    ),
 
                StreamBuilder(
                    stream: Firestore.instance.collection('menu').snapshots() ,
@@ -145,7 +210,7 @@ class _OrderPageState extends State<OrderPage> {
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshhot) {
                       if (!snapshhot.hasData) return Text("Loading Data.. Please Waiy");
-                      return Column(
+                     return Column(
                         children: snapshhot.data.documents.map((document){
                           if(document['name']==widget.name)
                           return  Card(
@@ -166,33 +231,14 @@ class _OrderPageState extends State<OrderPage> {
                                     height: 1.5,
                                   ),
                                   RadioListTile(
-                                    value: 0,
+                                    value: 1,
                                     groupValue: radio1,
-                                    onChanged: rdioChecked ,
+                                    onChanged: rdioChecked,
                                     title: Text('Small',style: TextStyle(
                                         color: Colors.black
                                     ),),
                                     activeColor: Colors.orange,
-                                    secondary: Text(document['price_large'],
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16
-                                      ),
-                                    ),
-                                  ),
-                                  Divider(
-                                    height: 0.05,
-                                    color: Colors.grey,
-                                  ),
-                                  RadioListTile(
-                                    value: 1,
-                                    groupValue: radio1,
-                                    onChanged: rdioChecked ,
-                                    title: Text('Medium',style: TextStyle(
-                                        color: Colors.black
-                                    ),),
-                                    activeColor: Colors.orange,
-                                    secondary: Text(document['price_medium'],
+                                    secondary: Text(SP= document['price_small'],
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 16
@@ -207,12 +253,31 @@ class _OrderPageState extends State<OrderPage> {
                                     value: 2,
                                     groupValue: radio1,
                                     onChanged: rdioChecked ,
+                                    title: Text('Medium',style: TextStyle(
+                                        color: Colors.black
+                                    ),),
+                                    activeColor: Colors.orange,
+                                    secondary: Text(MP= document['price_medium'],
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16
+                                      ),
+                                    ),
+                                  ),
+                                  Divider(
+                                    height: 0.05,
+                                    color: Colors.grey,
+                                  ),
+                                  RadioListTile(
+                                    value: 3,
+                                    groupValue: radio1,
+                                    onChanged: rdioChecked ,
                                     title: Text('Large',style: TextStyle(
                                         color: Colors.black
                                     ),
                                     ),
                                     activeColor: Colors.orange,
-                                    secondary: Text(document['price_small'],
+                                    secondary: Text(LP= document['price_large'],
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 16
@@ -226,8 +291,10 @@ class _OrderPageState extends State<OrderPage> {
                           return Container();
                         }).toList(),
                       );
+
                     }
                  ),
+
 
                 Card(
                   child: Container(
@@ -253,7 +320,7 @@ class _OrderPageState extends State<OrderPage> {
                               color: Colors.black,
                           ),),
                           activeColor: Colors.orange,
-                          secondary: Text('5 EP',
+                          secondary: Text('8 EP',
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 16
@@ -292,7 +359,7 @@ class _OrderPageState extends State<OrderPage> {
                           ),
                           ),
                           activeColor: Colors.orange,
-                          secondary: Text('5 EP',
+                          secondary: Text('10 EP',
                             style: TextStyle(
                               color: Colors.black,
                                 fontSize: 16
@@ -342,9 +409,9 @@ class _OrderPageState extends State<OrderPage> {
 
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
 
-     /* bottomNavigationBar:  BottomAppBar(
+      bottomNavigationBar:  BottomAppBar(
         color: Colors.orange,
         elevation: 0.0,
         shape:  CircularNotchedRectangle(),
@@ -364,24 +431,12 @@ class _OrderPageState extends State<OrderPage> {
                       style: new TextStyle(
                           color: Colors.black, fontWeight: FontWeight.w700)),
                   onPressed: (){
-                    StreamBuilder(
-                      stream: Firestore.instance.collection('menu').snapshots(),
-                        builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> snapshhot) {
-                       if (!snapshhot.hasData) return Text("Loading Data.. Please Waiy");
-                       return Column(
-                           children: snapshhot.data.documents.map((document){
-                             if(document['name']==widget.name)
-                               return createdata();
-                           }).toList(),
-
-                       );
-                      }
-                    );
+                    createdata();
                   },
                 ),
 
               ),
-              new Container(
+            /*  new Container(
                 width: 100.00,
                 child: FlatButton(
                   child: new Text(
@@ -392,28 +447,10 @@ class _OrderPageState extends State<OrderPage> {
                   ),
                   onPressed: (){},
                 ),
-              ),
+              ),*/
             ],
           ),
         ),
-      ),*/
-
-      bottomNavigationBar: BottomNavigationBar(
-          items: < BottomNavigationBarItem >[
-
-            BottomNavigationBarItem(
-              icon: Icon(Icons.add,color: Colors.black),
-              title: Text('ADD',style: TextStyle(color: Colors.orange)),
-
-            ),
-
-            BottomNavigationBarItem(
-              icon: Icon(Icons.minimize,color: Colors.black,),
-              title: Text('REMOVE',style: TextStyle(color: Colors.orange)),
-
-            ),
-          ],
-
       ),
 
     );

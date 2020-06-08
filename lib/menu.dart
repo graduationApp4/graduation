@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/offers_orderPage.dart';
 import 'orderPage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -146,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) {
-                                                  return OrderPage();
+                                                  return OffersOrder(name: document['name']);
                                                 },
                                               ),
                                             );
