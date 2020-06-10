@@ -7,8 +7,8 @@ import 'cart.dart';
 
 class OffersOrder extends StatefulWidget {
   String name;
-
-  OffersOrder({Key key,this.name}):super(key: key);
+  final String qrText;
+  OffersOrder({Key key,this.name,this.qrText}):super(key: key);
 
   @override
   _OffersOrderState createState() => _OffersOrderState();
@@ -96,6 +96,7 @@ class _OffersOrderState extends State<OffersOrder> {
       "2st OrderOthersPrice": checkval4,
       "3st OrderOthers": checkval5,
       "3st OrderOthersPrice": checkval6,
+      "TableNumber":widget.qrText
     };
     ds.setData(orders).whenComplete((){
       print("order done");

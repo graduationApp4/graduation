@@ -9,7 +9,8 @@ import 'cart.dart';
 class OrderPage extends StatefulWidget {
   String name;
   String number;
-  OrderPage({Key key,this.name,this.number}):super(key: key);
+  final String qrText;
+  OrderPage({Key key,this.name,this.number,this.qrText}):super(key: key);
 
   @override
   _OrderPageState createState() => _OrderPageState();
@@ -99,7 +100,7 @@ class _OrderPageState extends State<OrderPage> {
       "2st OrderOthersPrice": checkval4,
       "3st OrderOthers": checkval5,
       "3st OrderOthersPrice": checkval6,
-
+      "TableNumber":widget.qrText ,
     };
     ds.setData(orders).whenComplete((){
       print("order done");

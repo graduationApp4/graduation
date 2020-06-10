@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/offers_orderPage.dart';
 import 'orderPage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -14,6 +13,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
   Firestore firestore = Firestore.instance;
 
   Future<void> addQr() {
@@ -147,7 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) {
-                                                  return OffersOrder(name: document['name']);
+                                                  return OffersOrder(name: document['name'],qrText: widget._qrText,);
                                                 },
                                               ),
                                             );
@@ -227,7 +227,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   context,
                                                   MaterialPageRoute(
                                                     builder: (context) {
-                                                      return OrderPage(name: document['name']);
+                                                      return OrderPage(name: document['name'],qrText: widget._qrText,);
                                                     },
                                                   ),
                                                 );
@@ -311,7 +311,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) {
-                                                        return OrderPage(name: document['name']);
+                                                        return OrderPage(name: document['name'],qrText: widget._qrText,);
                                                       },
                                                     ),
                                                   );
@@ -396,7 +396,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) {
-                                                        return OrderPage(name: document['name']);
+                                                        return OrderPage(name: document['name'],qrText: widget._qrText,);
                                                       },
                                                     ),
                                                   );
@@ -481,7 +481,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     context,
                                                     MaterialPageRoute(
                                                       builder: (context) {
-                                                        return OrderPage(name: document['name']);
+                                                        return OrderPage(name: document['name'],qrText: widget._qrText,);
                                                       },
                                                     ),
                                                   );
