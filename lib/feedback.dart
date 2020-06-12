@@ -1,6 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_app/profile.dart';
+FirebaseUser loggedInUser ;
+final _auth = FirebaseAuth.instance;
+
 
 class feedback extends StatefulWidget {
   @override
@@ -15,7 +20,21 @@ class _feedbackState extends State<feedback> {
   IconData myFeedback = FontAwesomeIcons.sadTear;
   Color myFeedbackColor = Colors.red;
 
-
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
+  void getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser();
+      if (user != null) {
+        loggedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -29,11 +48,17 @@ class _feedbackState extends State<feedback> {
           child: Text("Feedback"),
         ),
         actions: <Widget>[
-          IconButton(icon: Icon(FontAwesomeIcons.solidStar), onPressed: (){
-
-          })
-
-        ],
+          IconButton(icon: Icon(Icons.person), onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context){
+                  return ProfileScreen(loggedInUser.uid);
+                },
+              ),
+            );
+          }
+          )],
       ),
       body: Container(
           color: Color(0xffE5E5E5),

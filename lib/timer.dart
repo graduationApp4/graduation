@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:math' as math;
-
 import 'payment.dart';
+import 'package:my_app/profile.dart';
+FirebaseUser loggedInUser ;
+final _auth = FirebaseAuth.instance;
 
 class timer extends StatefulWidget {
   @override
@@ -27,8 +30,18 @@ class _timerState extends State<timer> with TickerProviderStateMixin {
       vsync: this,
       duration: Duration(minutes: 15),
     );
+    getCurrentUser();
   }
-
+  void getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser();
+      if (user != null) {
+        loggedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
@@ -40,8 +53,17 @@ class _timerState extends State<timer> with TickerProviderStateMixin {
             child: Text("Timer"),
           ),
           actions: <Widget>[
-            IconButton(icon: Icon(Icons.timer), onPressed: () {})
-          ],
+            IconButton(icon: Icon(Icons.person), onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context){
+                    return ProfileScreen(loggedInUser.uid);
+                  },
+                ),
+              );
+            }
+            )],
         ),
         body: Padding(
           padding: EdgeInsets.all(8.0),

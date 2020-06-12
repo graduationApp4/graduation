@@ -1,8 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/offers_orderPage.dart';
 import 'orderPage.dart';
+import 'package:my_app/profile.dart';
+FirebaseUser loggedInUser ;
+final _auth = FirebaseAuth.instance;
+List<String> category = new List<String>();
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -29,8 +34,18 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     addQr();
     super.initState();
+    getCurrentUser();
   }
-
+  void getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser();
+      if (user != null) {
+        loggedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQuery.of(context).size.height;
@@ -41,13 +56,21 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.orange,
-        leading: IconButton(icon: Icon(Icons.menu), onPressed: () {}),
         title: Center(
           child: Text("Menu"),
         ),
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.person), onPressed: () {})
-        ],
+      IconButton(icon: Icon(Icons.person), onPressed: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context){
+            return ProfileScreen(loggedInUser.uid);
+          },
+        ),
+      );
+    }
+      )],
       ),
       body: Container(
         height: screenHeight,
@@ -62,7 +85,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshhot) {
                       if (!snapshhot.hasData)
-                        return Text("Loading Data.. Please Waiy");
+                        return Text("Loading Data.. Please Wait");
                       return new Container(
                         height: screenHeight * 5 / 16,
                         width: screenWidth,
@@ -149,9 +172,9 @@ class _MyHomePageState extends State<MyHomePage> {
                                                 builder: (context) {
                                                   return OffersOrder(name: document['name'],qrText: widget._qrText,);
                                                 },
-                                              ),
-                                            );
-                                          }))
+                                                  ),
+                                                );
+                                              }))
                                     ],
                                   ),
                                 ));
@@ -174,7 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshhot) {
                       if (!snapshhot.hasData)
-                        return Text("Loading Data.. Please Waiy");
+                        return Text("Loading Data.. Please Wait");
                       return new Container(
                         margin: EdgeInsets.symmetric(vertical: 20.0),
                         height: 320,
@@ -190,7 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     child: Wrap(
                                       children: <Widget>[
                                         Container(
-                                          height:150,
+                                          height: 150,
                                           decoration: BoxDecoration(
                                               image: DecorationImage(
                                                   image: NetworkImage(
@@ -198,21 +221,31 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   fit: BoxFit.cover)),
                                         ),
                                         Padding(
-                                          padding: EdgeInsets.only(top:5.0),
+                                          padding: EdgeInsets.only(top: 5.0),
                                           child: Container(
                                             height: 50,
                                             child: ListTile(
-                                              title: Text(document['name'],style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600),),
-                                              subtitle:
-                                                  Text(document['content'],style: TextStyle(fontSize: 12),),
+                                              title: Text(
+                                                document['name'],
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              subtitle: Text(
+                                                document['content'],
+                                                style: TextStyle(fontSize: 12),
+                                              ),
                                             ),
                                           ),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(top:30.0,left: 20.0),
+                                          padding: const EdgeInsets.only(
+                                              top: 30.0, left: 20.0),
                                           child: Text("price: " +
                                               document['price_large']),
                                         ),
+
                                         Padding(padding: const EdgeInsets.all(10.0),
                                         child: Center(
                                           child: new IconButton(
@@ -237,8 +270,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ],
                                     )),
                               );
-                            return new Container(
-                            );
+                            return new Container();
                           }).toList(),
                         ),
                       );
@@ -258,7 +290,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshhot) {
                       if (!snapshhot.hasData)
-                        return Text("Loading Data.. Please Waiy");
+                        return Text("Loading Data.. Please Wait");
                       return new Container(
                         margin: EdgeInsets.symmetric(vertical: 20.0),
                         height: 320,
@@ -274,7 +306,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     child: Wrap(
                                       children: <Widget>[
                                         Container(
-                                          height:150,
+                                          height: 150,
                                           decoration: BoxDecoration(
                                               image: DecorationImage(
                                                   image: NetworkImage(
@@ -282,22 +314,32 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   fit: BoxFit.cover)),
                                         ),
                                         Padding(
-                                          padding: EdgeInsets.only(top:5.0),
+                                          padding: EdgeInsets.only(top: 5.0),
                                           child: Container(
                                             height: 50,
                                             child: ListTile(
-                                              title: Text(document['name'],style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600),),
-                                              subtitle:
-                                              Text(document['content'],style: TextStyle(fontSize: 12),),
+                                              title: Text(
+                                                document['name'],
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              subtitle: Text(
+                                                document['content'],
+                                                style: TextStyle(fontSize: 12),
+                                              ),
                                             ),
                                           ),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(top:30.0,left: 20.0),
+                                          padding: const EdgeInsets.only(
+                                              top: 30.0, left: 20.0),
                                           child: Text("price: " +
                                               document['price_large']),
                                         ),
-                                        Padding(padding: const EdgeInsets.all(10.0),
+                                        Padding(
+                                          padding: const EdgeInsets.all(10.0),
                                           child: Center(
                                             child: new IconButton(
                                                 alignment: Alignment.topCenter,
@@ -312,7 +354,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     MaterialPageRoute(
                                                       builder: (context) {
                                                         return OrderPage(name: document['name'],qrText: widget._qrText,);
-                                                      },
+                                                                },
                                                     ),
                                                   );
                                                 }),
@@ -321,9 +363,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ],
                                     )),
                               );
-                            return new Container(
-
-                            );
+                            return new Container();
                           }).toList(),
                         ),
                       );
@@ -343,7 +383,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshhot) {
                       if (!snapshhot.hasData)
-                        return Text("Loading Data.. Please Waiy");
+                        return Text("Loading Data.. Please Wait");
                       return new Container(
                         margin: EdgeInsets.symmetric(vertical: 20.0),
                         height: 320,
@@ -359,7 +399,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     child: Wrap(
                                       children: <Widget>[
                                         Container(
-                                          height:150,
+                                          height: 150,
                                           decoration: BoxDecoration(
                                               image: DecorationImage(
                                                   image: NetworkImage(
@@ -367,22 +407,34 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   fit: BoxFit.cover)),
                                         ),
                                         Padding(
-                                          padding: EdgeInsets.only(top:5.0),
+                                          padding: EdgeInsets.only(top: 5.0),
                                           child: Container(
                                             height: 50,
                                             child: ListTile(
-                                              title: Text(document['name'],style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600),),
-                                              subtitle:
-                                              Text(document['content'],style: TextStyle(fontSize: 12,),),
+                                              title: Text(
+                                                document['name'],
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              subtitle: Text(
+                                                document['content'],
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                ),
+                                              ),
                                             ),
                                           ),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(top:30.0,left: 20.0),
+                                          padding: const EdgeInsets.only(
+                                              top: 30.0, left: 20.0),
                                           child: Text("price: " +
                                               document['price_large']),
                                         ),
-                                        Padding(padding: const EdgeInsets.all(10.0),
+                                        Padding(
+                                          padding: const EdgeInsets.all(10.0),
                                           child: Center(
                                             child: new IconButton(
                                                 alignment: Alignment.topCenter,
@@ -397,7 +449,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                                     MaterialPageRoute(
                                                       builder: (context) {
                                                         return OrderPage(name: document['name'],qrText: widget._qrText,);
-                                                      },
+                                                           },
                                                     ),
                                                   );
                                                 }),
@@ -406,15 +458,14 @@ class _MyHomePageState extends State<MyHomePage> {
                                       ],
                                     )),
                               );
-                            return new Container(
-                            );
+                            return new Container();
                           }).toList(),
                         ),
                       );
                     }),
                 Padding(
                     padding:
-                    EdgeInsets.only(top: 20.0, right: 220.0, left: 5.0),
+                        EdgeInsets.only(top: 20.0, right: 220.0, left: 5.0),
                     child: Text(
                       "Flipping Noodles",
                       style: TextStyle(
@@ -427,7 +478,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     builder: (BuildContext context,
                         AsyncSnapshot<QuerySnapshot> snapshhot) {
                       if (!snapshhot.hasData)
-                        return Text("Loading Data.. Please Waiy");
+                        return Text("Loading Data.. Please Wait");
                       return new Container(
                         margin: EdgeInsets.symmetric(vertical: 20.0),
                         height: 320,
@@ -444,7 +495,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     child: Wrap(
                                       children: <Widget>[
                                         Container(
-                                          height:150,
+                                          height: 150,
                                           decoration: BoxDecoration(
                                               image: DecorationImage(
                                                   image: NetworkImage(
@@ -452,22 +503,32 @@ class _MyHomePageState extends State<MyHomePage> {
                                                   fit: BoxFit.cover)),
                                         ),
                                         Padding(
-                                          padding: EdgeInsets.only(top:5.0),
+                                          padding: EdgeInsets.only(top: 5.0),
                                           child: Container(
                                             height: 50,
                                             child: ListTile(
-                                              title: Text(document['name'],style: TextStyle(fontSize: 15,fontWeight: FontWeight.w600),),
-                                              subtitle:
-                                              Text(document['content'],style: TextStyle(fontSize: 12),),
+                                              title: Text(
+                                                document['name'],
+                                                style: TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              subtitle: Text(
+                                                document['content'],
+                                                style: TextStyle(fontSize: 12),
+                                              ),
                                             ),
                                           ),
                                         ),
                                         Padding(
-                                          padding: const EdgeInsets.only(top:30.0,left: 20.0),
+                                          padding: const EdgeInsets.only(
+                                              top: 30.0, left: 20.0),
                                           child: Text("price: " +
                                               document['price_large']),
                                         ),
-                                        Padding(padding: const EdgeInsets.all(10.0),
+                                        Padding(
+                                          padding: const EdgeInsets.all(10.0),
                                           child: Center(
                                             child: new IconButton(
                                                 alignment: Alignment.topCenter,

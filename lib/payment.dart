@@ -1,20 +1,58 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'feedback.dart';
+import 'package:my_app/profile.dart';
+FirebaseUser loggedInUser ;
+final _auth = FirebaseAuth.instance;
+
+
+
+
+
+
 class PaymentPage extends StatefulWidget {
   @override
   _PaymentPageState createState() => _PaymentPageState();
 }
 class _PaymentPageState extends State<PaymentPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
+  void getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser();
+      if (user != null) {
+        loggedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar (
-        elevation: 0,
-        backgroundColor:  Colors.orange,
-        title: Text("FooDate"),
-        centerTitle: true,
+      appBar: AppBar(
+        backgroundColor: Colors.orange,
+        leading: IconButton(icon: Icon(Icons.arrow_back), onPressed: () {}),
+        title: Center(
+          child: Text("Payment"),
+        ),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.person), onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context){
+                  return ProfileScreen(loggedInUser.uid);
+                },
+              ),
+            );
+          }
+          )],
       ),
       body: Container(
 

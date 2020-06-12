@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart' ;
 import 'package:my_app/firebase_auth.dart';
 import 'cart.dart';
+import 'package:my_app/profile.dart';
+FirebaseUser loggedInUser ;
+final _auth = FirebaseAuth.instance;
 
 
 class OffersOrder extends StatefulWidget {
@@ -103,12 +107,41 @@ class _OffersOrderState extends State<OffersOrder> {
     });
   }
   @override
+  void initState() {
+    super.initState();
+    getCurrentUser();
+  }
+  void getCurrentUser() async {
+    try {
+      final user = await _auth.currentUser();
+      if (user != null) {
+        loggedInUser = user;
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+  @override
   Widget build(BuildContext context) {
     return new Scaffold(
 
       appBar: AppBar(
-        title: Text('Order', style: TextStyle(color: Colors.white),),
         backgroundColor: Colors.orange,
+        title: Center(
+          child: Text("Order"),
+        ),
+        actions: <Widget>[
+          IconButton(icon: Icon(Icons.person), onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context){
+                  return ProfileScreen(loggedInUser.uid);
+                },
+              ),
+            );
+          }
+          )],
       ),
 
 
@@ -397,7 +430,7 @@ class _OffersOrderState extends State<OffersOrder> {
             child: new Text(
               "0",
               style: new TextStyle(
-                  color: Colors.black, fontSize: 12.0
+                  color: Colors.white, fontSize: 14.0
               ),
             ),
           ),
@@ -478,7 +511,7 @@ class _OffersOrderState extends State<OffersOrder> {
                   child: Text("ADD",
                       textAlign: TextAlign.center,
                       style: new TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w700)),
+                          color: Colors.white, fontWeight: FontWeight.w700)),
                   onPressed: (){
                     createdata();
                   },
