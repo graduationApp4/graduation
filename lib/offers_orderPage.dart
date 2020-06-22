@@ -20,6 +20,13 @@ class OffersOrder extends StatefulWidget {
 
 class _OffersOrderState extends State<OffersOrder> {
 
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  bool _autoValidate = false;
+
+  var counter =0;
+
   String image;
 
   var radio1 =0;
@@ -54,6 +61,7 @@ class _OffersOrderState extends State<OffersOrder> {
       }
     });
   }
+
   void checkedbox1(bool val){
     setState(() {
       check1=val;
@@ -63,6 +71,7 @@ class _OffersOrderState extends State<OffersOrder> {
       }
     });
   }
+
   void checkedbox2(bool val){
     setState(() {
       check2=val;
@@ -73,6 +82,7 @@ class _OffersOrderState extends State<OffersOrder> {
 
     });
   }
+
   void checkedbox3(bool val){
     setState(() {
       check3=val;
@@ -80,6 +90,12 @@ class _OffersOrderState extends State<OffersOrder> {
       { checkval5= 'Salad';
       checkval6 ='10';
       }
+    });
+  }
+
+  void increment(){
+    setState(() {
+      counter++;
     });
   }
 
@@ -100,12 +116,56 @@ class _OffersOrderState extends State<OffersOrder> {
       "2st OrderOthersPrice": checkval4,
       "3st OrderOthers": checkval5,
       "3st OrderOthersPrice": checkval6,
-      "TableNumber":widget.qrText
+      "TableNumber":widget.qrText,
+      "status":"in progress",
     };
     ds.setData(orders).whenComplete((){
       print("order done");
     });
   }
+
+  staffOrder()async{
+    DocumentReference  ds= Firestore.instance.collection('Staff').document('JasNCMG7GwggtriIvFuqfN9IhQz2').collection('orders').document();
+
+    Map<String,dynamic> orders={
+      "OrderSize":radioval,
+      "OrderPrice":radioval2,
+      "OrderName": widget.name,
+      "OrderImage":image,
+      "1st OrderOthers": checkval,
+      "1st OrderOthersPrice": checkval2,
+      "2st OrderOthers": checkval3,
+      "2st OrderOthersPrice": checkval4,
+      "3st OrderOthers": checkval5,
+      "3st OrderOthersPrice": checkval6,
+      "TableNumber":widget.qrText ,
+      "status":"in progress",
+    };
+    ds.setData(orders).whenComplete((){
+      print("order done");
+    });
+  }
+
+  void _showSnackBar(message) {
+    final snackBar = new SnackBar(
+      content: new Text(message),
+    );
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+  }
+
+  void _validateInputs(){
+    final form = _formKey.currentState;
+    if (form.validate()){
+      if(radio1<1){
+        _showSnackBar('Please Select Your Order Size');
+      } else{
+        createdata();
+        staffOrder();
+        increment();
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -122,16 +182,20 @@ class _OffersOrderState extends State<OffersOrder> {
     }
   }
   @override
+
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldKey,
 
       appBar: AppBar(
         backgroundColor: Colors.orange,
         title: Center(
           child: Text("Order"),
         ),
+
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.person), onPressed: () {
+          IconButton(icon: Icon(Icons.person),
+              onPressed: () {
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -171,10 +235,8 @@ class _OffersOrderState extends State<OffersOrder> {
                                         bottomRight:  Radius.circular(40.0),
                                         bottomLeft:  Radius.circular(40.0),
                                       )
-
                                   ),
                                 )
-
                               ],
                             );
                           return Container();
@@ -230,7 +292,6 @@ class _OffersOrderState extends State<OffersOrder> {
                           return Container();
                         }).toList(),
                       );
-
                     }
                 ),
 
@@ -245,82 +306,85 @@ class _OffersOrderState extends State<OffersOrder> {
                             return  Card(
                               child: Container(
                                 margin:  EdgeInsets.only(left: 20.0, right: 20.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    SizedBox(
-                                      height: 5.0,
-                                    ),
-                                    Text(
-                                      "Size",
-                                      style:  TextStyle(
-                                          fontSize: 18.0, fontWeight: FontWeight.w700),
-                                    ),
-                                    SizedBox(
-                                      height: 1.5,
-                                    ),
-                                    RadioListTile(
-                                      value: 1,
-                                      groupValue: radio1,
-                                      onChanged: rdioChecked ,
-                                      title: Text('Small',style: TextStyle(
-                                          color: Colors.black
-                                      ),),
-                                      activeColor: Colors.orange,
-                                      secondary: Text(SP=document['price_small'],
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16
+                                child: Form(
+                                  key: _formKey,
+                                  autovalidate: _autoValidate,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      SizedBox(
+                                        height: 5.0,
+                                      ),
+                                      Text(
+                                        "Size",
+                                        style:  TextStyle(
+                                            fontSize: 18.0, fontWeight: FontWeight.w700),
+                                      ),
+                                      SizedBox(
+                                        height: 1.5,
+                                      ),
+                                      RadioListTile(
+                                        value: 1,
+                                        groupValue: radio1,
+                                        onChanged: rdioChecked,
+                                        title: Text('Small',style: TextStyle(
+                                            color: Colors.black
+                                        ),),
+                                        activeColor: Colors.orange,
+                                        secondary: Text(SP= document['price_small'],
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Divider(
-                                      height: 0.05,
-                                      color: Colors.grey,
-                                    ),
-                                    RadioListTile(
-                                      value: 2,
-                                      groupValue: radio1,
-                                      onChanged: rdioChecked ,
-                                      title: Text('Medium',style: TextStyle(
-                                          color: Colors.black
-                                      ),),
-                                      activeColor: Colors.orange,
-                                      secondary: Text(MP=document['price_medium'],
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16
+                                      Divider(
+                                        height: 0.05,
+                                        color: Colors.grey,
+                                      ),
+                                      RadioListTile(
+                                        value: 2,
+                                        groupValue: radio1,
+                                        onChanged: rdioChecked ,
+                                        title: Text('Medium',style: TextStyle(
+                                            color: Colors.black
+                                        ),),
+                                        activeColor: Colors.orange,
+                                        secondary: Text(MP= document['price_medium'],
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Divider(
-                                      height: 0.05,
-                                      color: Colors.grey,
-                                    ),
-                                    RadioListTile(
-                                      value: 3,
-                                      groupValue: radio1,
-                                      onChanged: rdioChecked ,
-                                      title: Text('Large',style: TextStyle(
-                                          color: Colors.black
+                                      Divider(
+                                        height: 0.05,
+                                        color: Colors.grey,
                                       ),
-                                      ),
-                                      activeColor: Colors.orange,
-                                      secondary: Text(LP=document['price_large'],
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 16
+                                      RadioListTile(
+                                        value: 3,
+                                        groupValue: radio1,
+                                        onChanged: rdioChecked ,
+                                        title: Text('Large',style: TextStyle(
+                                            color: Colors.black
+                                        ),
+                                        ),
+                                        activeColor: Colors.orange,
+                                        secondary: Text(LP= document['price_large'],
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 16
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
                             );
                           return Container();
                         }).toList(),
                       );
-
                     }
                 ),
 
@@ -399,7 +463,6 @@ class _OffersOrderState extends State<OffersOrder> {
                     ),
                   ),
                 ),
-
               ]),
             ),
           ],
@@ -412,12 +475,12 @@ class _OffersOrderState extends State<OffersOrder> {
           new FloatingActionButton(
             child: new Icon(Icons.shopping_cart,),
             backgroundColor: Colors.orange,
+
             onPressed: (){
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context){
-
                     return Cart();
                   },
                 ),
@@ -428,70 +491,17 @@ class _OffersOrderState extends State<OffersOrder> {
             radius: 10.0,
             backgroundColor: Colors.orangeAccent,
             child: new Text(
-              "0",
+              "$counter",
               style: new TextStyle(
                   color: Colors.white, fontSize: 14.0
               ),
             ),
           ),
-
         ],
       ),
+
       floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
 
-      /* bottomNavigationBar:  BottomAppBar(
-        color: Colors.orange,
-        elevation: 0.0,
-        shape:  CircularNotchedRectangle(),
-        notchMargin: 5.0,
-        child: new Container(
-          height: 50.0,
-          decoration: new BoxDecoration(color: Colors.white12),
-          child: new Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-
-              new Container(
-                width: 100.00,
-                child: FlatButton(
-                  child: Text("ADD",
-                      textAlign: TextAlign.center,
-                      style: new TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w700)),
-                  onPressed: (){
-                    StreamBuilder(
-                      stream: Firestore.instance.collection('menu').snapshots(),
-                        builder: (BuildContext context,AsyncSnapshot<QuerySnapshot> snapshhot) {
-                       if (!snapshhot.hasData) return Text("Loading Data.. Please Waiy");
-                       return Column(
-                           children: snapshhot.data.documents.map((document){
-                             if(document['name']==widget.name)
-                               return createdata();
-                           }).toList(),
-
-                       );
-                      }
-                    );
-                  },
-                ),
-
-              ),
-              new Container(
-                width: 100.00,
-                child: FlatButton(
-                  child: new Text(
-                    "REMOVE",
-                    textAlign: TextAlign.center,
-                    style: new TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w700),
-                  ),
-                  onPressed: (){},
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),*/
 
       bottomNavigationBar:  BottomAppBar(
         color: Colors.orange,
@@ -512,30 +522,16 @@ class _OffersOrderState extends State<OffersOrder> {
                       textAlign: TextAlign.center,
                       style: new TextStyle(
                           color: Colors.white, fontWeight: FontWeight.w700)),
+
                   onPressed: (){
-                    createdata();
+                    _validateInputs();
                   },
                 ),
-
               ),
-              /*  new Container(
-                width: 100.00,
-                child: FlatButton(
-                  child: new Text(
-                    "REMOVE",
-                    textAlign: TextAlign.center,
-                    style: new TextStyle(
-                        color: Colors.black, fontWeight: FontWeight.w700),
-                  ),
-                  onPressed: (){},
-                ),
-              ),*/
             ],
           ),
         ),
       ),
-
     );
-
   }
 }
