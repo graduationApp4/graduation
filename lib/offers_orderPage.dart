@@ -481,7 +481,7 @@ class _OffersOrderState extends State<OffersOrder> {
                 context,
                 MaterialPageRoute(
                   builder: (context){
-                    return Cart();
+                    return Cart(loggedInUser.uid);
                   },
                 ),
               );

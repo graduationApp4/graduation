@@ -487,7 +487,7 @@ class _OrderPageState extends State<OrderPage> {
                 context,
                 MaterialPageRoute(
                   builder: (context){
-                    return Cart();
+                    return Cart(loggedInUser.uid);
                   },
                 ),
               );
