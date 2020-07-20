@@ -205,7 +205,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
                           children: snapshhot.data.documents.map((document) {
-                            if (document['category'].toString() == "Burger")
+                            if (document['category'].toString() == "Burger" && document['status'].toString()=="available")
                               return new Container(
                                 width: 160.0,
                                 child: Card(
@@ -298,7 +298,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
                           children: snapshhot.data.documents.map((document) {
-                            if (document['category'].toString() == "Pizza")
+                            if (document['category'].toString() == "Pizza" && document['status'].toString()=="available")
                               return new Container(
                                 width: 160.0,
                                 child: Card(
@@ -391,7 +391,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           scrollDirection: Axis.horizontal,
                           shrinkWrap: true,
                           children: snapshhot.data.documents.map((document) {
-                            if (document['category'].toString() == "Chicken")
+                            if (document['category'].toString() == "Chicken" && document['status'].toString()=="available")
                               return new Container(
                                 width: 160.0,
                                 child: Card(
@@ -487,7 +487,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           shrinkWrap: true,
                           children: snapshhot.data.documents.map((document) {
                             if (document['category'].toString() ==
-                                "Flipping Noodles")
+                                "Flipping Noodles" && document['status'].toString()=="available")
                               return new Container(
                                 width: 160.0,
                                 child: Card(
