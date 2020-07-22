@@ -46,7 +46,7 @@ class _LoginState extends State<Login>{
               height: MediaQuery.of(context).size.height/2.5,
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: ExactAssetImage('assets/images/login.jpg'),
+                      image: ExactAssetImage('images/Logo.jpg'),
                       fit: BoxFit.cover
                   ),
                   borderRadius: BorderRadius.only(

@@ -4,8 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_app/profile.dart';
-
-import 'firebase_auth.dart';
+import 'package:my_app/firebase_auth.dart';
+import 'package:rich_alert/rich_alert.dart';
 FirebaseUser loggedInUser ;
 final _auth = FirebaseAuth.instance;
 
@@ -15,6 +15,7 @@ class feedback extends StatefulWidget {
   _feedbackState createState() => _feedbackState();
 
 }
+
 class _feedbackState extends State<feedback> {
   var myFeedbackText = "COULD BE BETTER";
   var sliderValue = 0.0;
@@ -22,12 +23,26 @@ class _feedbackState extends State<feedback> {
   IconData myFeedback = FontAwesomeIcons.sadTear;
   Color myFeedbackColor = Colors.red;
 
+  setfeedback()async{
+    FirebaseAuthentication firebaseAuthentication= FirebaseAuthentication();
+    var user= await firebaseAuthentication.getCurrentUser();
+    DocumentReference  ds= Firestore.instance.collection('UsersFeedback').document(user.uid).collection('feedbacks').document();
+
+    Map<String,dynamic> feedbacks={
+      "feedback":myFeedbackText,
+    };
+    ds.setData(feedbacks).whenComplete((){
+      print("feedback done");
+    });
+  }
+  @override
+  void dispose() {
+    super.dispose();}
   @override
   void initState() {
     super.initState();
     getCurrentUser();
   }
-
   void getCurrentUser() async {
     try {
       final user = await _auth.currentUser();
@@ -154,6 +169,18 @@ class _feedbackState extends State<feedback> {
                             color: Colors.orange,
                             child: Text('Submit',style: TextStyle(color: Colors.black),),
                             onPressed: (){
+                              setfeedback();
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return RichAlertDialog(
+                                      alertTitle: richTitle("THANK YOU"),
+                                      alertSubtitle: richSubtitle("your feedback is highly appreciated"),
+                                      alertType: RichAlertType.SUCCESS,
+                                    );
+
+                                  }
+                              );
 
                             },
                           ),
