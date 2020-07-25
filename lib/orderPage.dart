@@ -27,8 +27,6 @@ class _OrderPageState extends State<OrderPage> {
 
   bool _autoValidate = false;
 
-  var counter =0;
-
   String image;
 
   var radio1 =0;
@@ -97,11 +95,6 @@ class _OrderPageState extends State<OrderPage> {
     });
   }
 
-  void increment(){
-    setState(() {
-      counter++;
-    });
-  }
 
   createdata()async{
    FirebaseAuthentication firebaseAuthentication= FirebaseAuthentication();
@@ -165,7 +158,7 @@ class _OrderPageState extends State<OrderPage> {
       } else{
         createdata();
         staffOrder();
-        increment();
+        _showSnackBar('Order Added Successfully');
       }
     }
   }
@@ -493,18 +486,6 @@ class _OrderPageState extends State<OrderPage> {
               );
             },
           ),
-
-          CircleAvatar(
-            radius: 10.0,
-            backgroundColor: Colors.orangeAccent,
-            child: new Text(
-              "$counter",
-              style: new TextStyle(
-                  color: Colors.white, fontSize: 14.0
-              ),
-            ),
-          ),
-
         ],
       ),
 

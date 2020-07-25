@@ -25,7 +25,6 @@ class _OffersOrderState extends State<OffersOrder> {
 
   bool _autoValidate = false;
 
-  var counter =0;
 
   String image;
 
@@ -93,12 +92,6 @@ class _OffersOrderState extends State<OffersOrder> {
     });
   }
 
-  void increment(){
-    setState(() {
-      counter++;
-    });
-  }
-
   createdata()async{
     FirebaseAuthentication firebaseAuthentication= FirebaseAuthentication();
     var user= await firebaseAuthentication.getCurrentUser();
@@ -161,7 +154,7 @@ class _OffersOrderState extends State<OffersOrder> {
       } else{
         createdata();
         staffOrder();
-        increment();
+        _showSnackBar('Order Added Successfully');
       }
     }
   }
@@ -412,7 +405,7 @@ class _OffersOrderState extends State<OffersOrder> {
                             color: Colors.black,
                           ),),
                           activeColor: Colors.orange,
-                          secondary: Text('5 EP',
+                          secondary: Text('8 EP',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16
@@ -451,7 +444,7 @@ class _OffersOrderState extends State<OffersOrder> {
                           ),
                           ),
                           activeColor: Colors.orange,
-                          secondary: Text('5 EP',
+                          secondary: Text('10 EP',
                             style: TextStyle(
                                 color: Colors.black,
                                 fontSize: 16
@@ -486,16 +479,6 @@ class _OffersOrderState extends State<OffersOrder> {
                 ),
               );
             },
-          ),
-          CircleAvatar(
-            radius: 10.0,
-            backgroundColor: Colors.orangeAccent,
-            child: new Text(
-              "$counter",
-              style: new TextStyle(
-                  color: Colors.white, fontSize: 14.0
-              ),
-            ),
           ),
         ],
       ),
